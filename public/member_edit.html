@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>超市管理系统——首页</title>
+    <!-- 引入重置样式 -->
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- 引入elementUI -->
+    <link rel="stylesheet" href="css/elementUI.css">
+    <!-- 引入首页的样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 验证cookie是否存在 -->
+    <script src="/users/checkCookie"></script>
+</head>
+
+<body>
+    <div id="app">
+        <el-header height="100px">
+            <h2>欢迎你 admin</h2>
+            <p>修改管理员账号</p>
+        </el-header>
+        <el-main>
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>修改管理员账号</span>
+                </div>
+                <!-- 主要内容 -->
+                <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
+                    :label-position="labelPosition" class="demo-ruleForm">
+                    <el-form-item label="用户名" prop="username">
+                        <el-input v-model="ruleForm2.username"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="pass">
+                        <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认密码" prop="checkPass">
+                        <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <!-- 下拉框 -->
+                    <el-form-item label="选择用户组" prop="region">
+                        <el-select v-model="ruleForm2.region" placeholder="请选择用户组">
+                            <el-option label="超级管理员" value="超级管理员"></el-option>
+                            <el-option label="普通管理员" value="普通管理员"></el-option>
+                            <el-option label="普通用户" value="普通用户"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('ruleForm2')">修改</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-main>
+    </div>
+    <!-- 引入jquery -->
+    <script src="./javascripts/jquery-2.1.1.min.js"></script>
+    <!-- 引入vue -->
+    <script src="./javascripts/vue.min.js"></script>
+    <!-- 引入elementUI -->
+    <script src="./javascripts/elementUI.js"></script>
+    <script>
+        //创建vue实例
+        new Vue({
+            //挂载视图
+            el: "#app",
+            data() {
+                //两次密码验证
+                var validatePass2 = (rule, value, callback) => {
+                    if (value !== this.ruleForm2.pass) {
+                        callback(new Error('两次输入密码不一致!'));
+                    } else {
+                        callback();
+                    }
+                };
+                return {
+                    labelPosition: 'top',
+                    ruleForm2: {
+                        region: '',
+                        pass: '',
+                        checkPass: '',
+                        username: '',
+                        u_id:0,
+                        oldPwd:""
+                    },
+                    rules2: {
+                        region: [
+                            { required: true, message: '请选择用户组', trigger: 'change' }
+                        ],
+                        pass: [
+                            { required: true, message: '请输入密码', trigger: 'blur' },
+                            { min: 6, max: 32, message: '长度在 6 到32 个字符', trigger: 'blur' }
+                        ],
+                        checkPass: [
+                            { validator: validatePass2, trigger: 'blur' },
+                            { required: true, message: '请再次输入密码', trigger: 'blur' },
+                            { min: 6, max: 32, message: '长度在 6 到32 个字符', trigger: 'blur' }
+                        ],
+                        username: [
+                            { required: true, message: '请输入用户名', trigger: 'blur' },
+                            { min: 6, max: 18, message: '长度在 6 到18 个字符', trigger: 'blur' }
+                        ]
+                    }
+                };
+            },
+
+            methods: {
+                //表单验证
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            //1.验证通过发送Ajax通过id修改数据
+                            $.post("/users/edit", this.ruleForm2, (res) => {
+                                // 4.接收后端返回的数据并处理
+                                if (res.isOK) {
+                                    alert(res.msg)
+                                    location.href = "./member_list.html"
+                                } else {
+                                    alert(res.msg)
+                                    return false
+                                }
+                            })
+                            // 2.后端接收前端发送的数据并写入数据库
+                            // 3.向前端返回数据
+
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                         }
+                    })
+                }
+            },
+            //加载完成执行钩子函数
+            mounted() {
+                //获取地址中的id
+                var u_id = location.href.split("=")[1]
+                //发送ajax通过id查找数据并回填
+                $.get("/users/getDataById",{u_id},(res)=>{
+                    //根据返回的数据处理业务逻辑
+                    //console.log(res)
+                    this.ruleForm2.region=res[0].userGroup
+                    this.ruleForm2.pass=res[0].userPwd
+                    this.ruleForm2.checkPass=res[0].userPwd
+                    this.ruleForm2.username=res[0].userName
+                    this.ruleForm2.u_id=res[0].u_id
+                    this.ruleForm2.oldPwd=res[0].userPwd
+                })
+            }
+        });
+    </script>
+</body>
+
+</html>

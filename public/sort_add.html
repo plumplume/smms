@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>超市管理系统——首页</title>
+    <!-- 引入重置样式 -->
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- 引入elementUI -->
+    <link rel="stylesheet" href="css/elementUI.css">
+    <!-- 引入首页的样式 -->
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <el-header height="100px">
+            <h2>欢迎你 admin</h2>
+            <p>查看和管理所有分类</p>
+        </el-header>
+        <el-main>
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>添加管理</span>
+                </div>
+                <!-- 主要内容 -->
+                <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
+                    :label-position="labelPosition" class="demo-ruleForm">
+                    <!-- 下拉框 -->
+                    <el-form-item label="所属分类" prop="region">
+                        <el-select v-model="ruleForm2.region" placeholder="请选择分类">
+                            <el-option label="顶级分类" value="顶级分类"></el-option>
+                            <el-option label="普通分类" value="普通分类"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="分类名称" prop="sortname">
+                        <el-input v-model="ruleForm2.sortname"></el-input>
+                    </el-form-item>
+                    <!-- 单选框 -->
+                    <el-form-item label="状态" prop="radio">
+                        <el-radio v-model="ruleForm2.radio" label="1">启用</el-radio>
+                        <el-radio v-model="ruleForm2.radio" label="2">禁用</el-radio>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+                        <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-main>
+    </div>
+    <!-- 引入jquery -->
+    <script src="./javascripts/jquery-2.1.1.min.js"></script>
+    <!-- 引入vue -->
+    <script src="./javascripts/vue.min.js"></script>
+    <!-- 引入elementUI -->
+    <script src="./javascripts/elementUI.js"></script>
+    <script>
+        //创建vue实例
+        new Vue({
+            //挂载视图
+            el: "#app",
+            data() {
+                return {
+                    labelPosition: 'top',
+                    ruleForm2: {
+                        radio: '1',
+                        region: '',
+                        sortname: ''
+                    },
+                    rules2: {
+                        region: [
+                            { required: true, message: '请选择分类', trigger: 'change' }
+                        ],
+                        sortname: [
+                            { required: true, message: '请输入分类名', trigger: 'blur' },
+                            { min: 2, max: 10, message: '长度在 2 到10 个字符', trigger: 'blur' }
+                        ]
+                    }
+                };
+            },
+
+            methods: {
+                //表单验证
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            //console.log(this.ruleForm2.radio)
+
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    });
+                },
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                }
+
+            }
+        });
+    </script>
+</body>
+
+</html>

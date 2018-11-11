@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>超市管理系统——首页</title>
+    <!-- 引入重置样式 -->
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- 引入elementUI -->
+    <link rel="stylesheet" href="css/elementUI.css">
+    <!-- 引入首页的样式 -->
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <el-header height="100px">
+            <h2>欢迎你 admin</h2>
+            <p>1.你可以在这里添加新的商品或者编辑已有的商品。2.新添加商品的时候可以同时进行入库（入库必须有数量和进价）！3.带<span>*</span>的项目必填</p>
+        </el-header>
+        <el-main>
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>添加商品</span>
+                </div>
+                <!-- 主要内容 -->
+                <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
+                    :label-position="labelPosition" class="demo-ruleForm">
+                    <!-- 下拉框 -->
+                    <el-form-item label="所属分类" prop="region">
+                        <el-select v-model="ruleForm2.region" placeholder="请选择分类">
+                            <el-option label="顶级分类" value="顶级分类"></el-option>
+                            <el-option label="普通分类" value="普通分类"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="商品条形码" prop="code">
+                        <el-input v-model="ruleForm2.code"></el-input>
+                        <el-button type="primary" plain>生成条形码</el-button>
+                    </el-form-item>
+                    <el-form-item label="商品名称" prop="productName">
+                        <el-input v-model="ruleForm2.productName"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商品售价" prop="productPrice" class="widthset">
+                        <el-input v-model="ruleForm2.productPrice"></el-input>元
+                    </el-form-item>
+                    <el-form-item label="市场价" prop="marketPrice" class="widthset">
+                        <el-input v-model="ruleForm2.marketPrice"></el-input>元
+                        <p>默认市场价为售价的1.2倍</p>
+                    </el-form-item>
+                    <el-form-item label="商品进价" prop="purchasingPrice" class="widthset">
+                        <el-input v-model="ruleForm2.purchasingPrice"></el-input>元
+                    </el-form-item>
+                    <el-form-item label="入库数量" prop="productNumber" class="widthset">
+                        <el-input v-model="ruleForm2.productNumber"></el-input>
+                        <p>记重商品单位为千克</p>
+                    </el-form-item>
+                    <el-form-item label="商品重量" prop="productWeight" class="widthset">
+                        <el-input v-model="ruleForm2.productWeight"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商品单位" prop="productUnit" class="widthset">
+                        <el-input v-model="ruleForm2.productUnit"></el-input>
+                    </el-form-item>
+                    <!-- 单选框 -->
+                    <el-form-item label="会员优惠" prop="radio1">
+                        <el-radio v-model="ruleForm2.radio1" label="1">享受</el-radio>
+                        <el-radio v-model="ruleForm2.radio1" label="2">不享受</el-radio>
+                    </el-form-item>
+                    <el-form-item label="是否促销" prop="radio2">
+                        <el-radio v-model="ruleForm2.radio2" label="1">启用</el-radio>
+                        <el-radio v-model="ruleForm2.radio2" label="2">禁用</el-radio>
+                    </el-form-item>
+                    <!-- 文本框 -->
+                    <el-form-item label="商品简介" prop="desc">
+                        <el-input type="textarea" v-model="ruleForm2.desc"></el-input>
+                        <p>不超过200个汉字</p>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+                        <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-main>
+    </div>
+    <!-- 引入jquery -->
+    <script src="./javascripts/jquery-2.1.1.min.js"></script>
+    <!-- 引入vue -->
+    <script src="./javascripts/vue.min.js"></script>
+    <!-- 引入elementUI -->
+    <script src="./javascripts/elementUI.js"></script>
+    <script>
+        //创建vue实例
+        new Vue({
+            //挂载视图
+            el: "#app",
+            data() {
+                return {
+                    labelPosition: 'top',
+                    ruleForm2: {
+                        desc: "",
+                        productUnit: "",
+                        productWeight: "",
+                        productNumber: "",
+                        purchasingPrice: "",
+                        marketPrice: "",
+                        productPrice: "",
+                        productName: "",
+                        radio1: '1',
+                        radio2: '2',
+                        region: '',
+                        code: ''
+                    },
+                    rules2: {
+                        desc: [
+                            { required: true, message: '请输入商品简介', trigger: 'blur' },
+                            { min: 2, max: 200, message: '长度在 2 到200 个字符', trigger: 'blur' }
+                        ],
+                        productUnit: [
+                            { required: true, message: '请输入商品单位', trigger: 'blur' }
+                        ],
+                        productWeight: [
+                            { required: true, message: '请输入商品重量', trigger: 'blur' }
+                        ],
+                        productNumber: [
+                            { required: true, message: '请输入入库数量', trigger: 'blur' }
+                        ],
+                        purchasingPrice: [
+                            { required: true, message: '请输入商品进价', trigger: 'blur' }
+                        ],
+                        marketPrice: [
+                            { required: true, message: '请输入商品市场价', trigger: 'blur' }
+                        ],
+                        productPrice: [
+                            { required: true, message: '请输入商品售价', trigger: 'blur' }
+                        ],
+                        productName: [
+                            { required: true, message: '请输入商品名称', trigger: 'blur' }
+                        ],
+                        code: [
+                            { required: true, message: '请输入商品条形码', trigger: 'blur' }
+                        ],
+                        region: [
+                            { required: true, message: '请选择分类', trigger: 'change' }
+                        ],
+                        sortname: [
+                            { required: true, message: '请输入分类名', trigger: 'blur' },
+                            { min: 2, max: 10, message: '长度在 2 到10 个字符', trigger: 'blur' }
+                        ]
+                    }
+                };
+            },
+
+            methods: {
+                //表单验证
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            //console.log(this.ruleForm2.radio)
+
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    });
+                },
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                }
+
+            }
+        });
+    </script>
+</body>
+
+</html>

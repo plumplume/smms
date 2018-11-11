@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>超市管理系统——首页</title>
+    <!-- 引入重置样式 -->
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- 引入elementUI -->
+    <link rel="stylesheet" href="css/elementUI.css">
+    <!-- 引入首页的样式 -->
+    <link rel="stylesheet" href="css/index.css">
+    <!-- 验证cookie是否存在 -->
+    <script src="/users/checkCookie"></script>
+</head>
+
+<body>
+    <div id="app">
+        <el-header height="100px">
+            <h2>欢迎你 admin</h2>
+            <p>查看所有管理员账号</p>
+        </el-header>
+        <el-main>
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>账号管理</span>
+                </div>
+                <!-- 主要内容 -->
+                <el-table :data="tableData" style="width: 100%">
+                    <el-table-column label="编号" prop="u_id">
+                    </el-table-column>
+                    <el-table-column label="账号" prop="userName">
+                    </el-table-column>
+                    <el-table-column label="用户名组" prop="userGroup">
+                    </el-table-column>
+                    <el-table-column label="日期" prop="createDatetime" :formatter="dateFormat">
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="mini" @click="handleEdit(scope.row)" type="primary" plain><i class="el-icon-edit"></i>编辑</el-button>
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.row)" plain><i class="el-icon-delete"></i>删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+        </el-main>
+    </div>
+    <!-- 引入jquery -->
+    <script src="./javascripts/jquery-2.1.1.min.js"></script>
+    <!-- 使用cdn -->
+    <!-- <script src="https://cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script> -->
+    <!-- 引入vue -->
+    <script src="./javascripts/vue.min.js"></script>
+    <!-- 引入moment.js -->
+    <script src="./javascripts/moment.min.js"></script>
+    <!-- 引入elementUI -->
+    <script src="./javascripts/elementUI.js"></script>
+    <script>
+        //创建vue实例
+        new Vue({
+            //挂载视图
+            el: "#app",
+            data() {
+                return {
+                    tableData: []
+                }
+
+            },
+
+            methods: {
+                //编辑和删除事件
+                handleEdit(row) {
+                    //console.log(index, row);
+                    //跳转到编辑页面并传参：id
+                    location.href = "./member_edit.html?id=" + row.u_id
+                },
+                handleDelete(row) {
+                    if (confirm("确定要删除吗？")) {
+                        //点击删除时向后端发送ajax
+                        $.get("/users/delete", row, (res) => {
+                            //console.log(res)
+                            //根据返回结果处理前端逻辑
+                            if (res.isOK) {
+                                alert(res.msg)
+                                //location.href="./member_list.html"
+                                //location.reload()
+                                //调用获取数据的方法
+                                this.getDataByAjax()
+                            } else {
+                                alert(res.msg)
+                                return false
+                            }
+                        })
+                    }
+                },
+                //封装从后端获取数据的方法
+                getDataByAjax() {
+                    //发送ajax请求数据
+                    $.get("/users/list", (userslist) => {
+                        //console.log("后端数据",userslist)
+                        //将后端返回的数据赋值给tableData
+                        this.tableData = userslist
+                    })
+                },
+                //格式化时间的方法
+                dateFormat(row, column) {
+                    var date = row[column.property];
+                    if (date == undefined) {
+                        return "";
+                    }
+                    return moment(date).format("YYYY-MM-DD");
+                }
+            },
+            mounted() {
+                //调用获取数据的方法
+                this.getDataByAjax()
+
+            }
+        });
+    </script>
+</body>
+
+</html>

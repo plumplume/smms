@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>超市管理系统——首页</title>
+    <!-- 引入重置样式 -->
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- 引入elementUI -->
+    <link rel="stylesheet" href="css/elementUI.css">
+    <!-- 引入首页的样式 -->
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <el-header height="100px">
+            <h2>欢迎你 admin</h2>
+            <p>查看和管理商品库存</p>
+        </el-header>
+        <el-main>
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>库存管理</span>
+                </div>
+                <!-- 主要内容 -->
+                <el-form :model="ruleForm2" :inline="true" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
+                    :label-position="labelPosition" class="demo-ruleForm">
+                    <!-- 下拉框 -->
+                    <el-form-item label="所属分类" prop="region">
+                        <el-select v-model="ruleForm2.region" placeholder="请选择分类">
+                            <el-option label="顶级分类" value="顶级分类"></el-option>
+                            <el-option label="普通分类" value="普通分类"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="关键字" prop="code">
+                        <el-input v-model="ruleForm2.code"></el-input>
+                    </el-form-item>
+                    <el-button type="primary" plain>查询</el-button>
+                </el-form>
+                <!-- 表格 -->
+                <el-table :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)" style="width: 100%">
+                    <el-table-column label="商品条形码" width="130">
+                        <template slot-scope="scope">
+                            <span style="margin-left: 10px">{{ scope.row.code }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="商品名称" width="130">
+                        <template slot-scope="scope">
+                            <span style="margin-left: 10px">{{ scope.row.productName }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="进价（元）" width="130">
+                        <template slot-scope="scope">
+                            <span style="margin-left: 10px;color:red">{{ scope.row.purchasingPrice }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="入库" width="130">
+                        <template slot-scope="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.productNumber }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="库存" width="130">
+                        <template slot-scope="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.inventory }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="已售" width="130">
+                        <template slot-scope="scope">
+                            <span style="margin-left: 10px;">{{ scope.row.productSolded }}</span>
+                        </template>
+                    </el-table-column>
+                   
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <!-- 分页 -->
+                <el-pagination background layout="prev, pager, next" prev-text="上一页" next-text="下一页" :total="total"
+                    @current-change="current_change">
+                </el-pagination>
+            </el-card>
+        </el-main>
+    </div>
+    <!-- 引入jquery -->
+    <script src="./javascripts/jquery-2.1.1.min.js"></script>
+    <!-- 引入vue -->
+    <script src="./javascripts/vue.min.js"></script>
+    <!-- 引入elementUI -->
+    <script src="./javascripts/elementUI.js"></script>
+    <script>
+        //创建vue实例
+        new Vue({
+            //挂载视图
+            el: "#app",
+            data() {
+                return {
+                    labelPosition: 'left',
+                    tableData: [{
+                        code: 1,
+                        productName: '我的优乐美',
+                        purchasingPrice: "2",
+                        productNumber:"",
+                        inventory:"",
+                        productSolded:"",
+
+                    }],
+                    total: 50,
+                    pagesize: 2,
+                    currentPage: 1,
+                    ruleForm2: {
+                        region: '',
+                        code: ''
+                    },
+                    rules2: {
+                        code: [
+                            { required: true, message: '请输入商品条形码', trigger: 'blur' }
+                        ],
+                        region: [
+                            { required: true, message: '请选择分类', trigger: 'change' }
+                        ],
+                    }
+                };
+            },
+
+            methods: {
+                //表单验证
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            //console.log(this.ruleForm2.radio)
+
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    });
+                },
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                },
+                //分页事件
+                current_change: function (currentPage) {
+                    this.currentPage = currentPage;
+                },
+
+            }
+        });
+    </script>
+</body>
+
+</html>

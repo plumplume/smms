@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>超市管理系统——首页</title>
+    <!-- 引入重置样式 -->
+    <link rel="stylesheet" href="css/reset.css">
+    <!-- 引入elementUI -->
+    <link rel="stylesheet" href="css/elementUI.css">
+    <!-- 引入首页的样式 -->
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <el-header height="100px">
+            <h2>欢迎你 admin</h2>
+            <p>商品入库。带<span>*</span>必填</p>
+        </el-header>
+        <el-main>
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>商品入库</span>
+                </div>
+                <!-- 主要内容 -->
+                <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
+                    :label-position="labelPosition" class="demo-ruleForm">
+                    <el-form-item label="商品条形码" prop="code">
+                        <el-input v-model="ruleForm2.code"></el-input>
+                    </el-form-item>
+                    <el-form-item label="数量" prop="productNumber">
+                        <el-input v-model="ruleForm2.productNumber"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商品进价" prop="purchasingPrice" class="widthset">
+                            <el-input v-model="ruleForm2.purchasingPrice"></el-input>元
+                        </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+                        <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+        </el-main>
+    </div>
+    <!-- 引入jquery -->
+    <script src="./javascripts/jquery-2.1.1.min.js"></script>
+    <!-- 引入vue -->
+    <script src="./javascripts/vue.min.js"></script>
+    <!-- 引入elementUI -->
+    <script src="./javascripts/elementUI.js"></script>
+    <script>
+        //创建vue实例
+        new Vue({
+            //挂载视图
+            el: "#app",
+            data() {
+                return {
+                    labelPosition: 'top',
+                    ruleForm2: {
+                        code: '',
+                        productNumber:"",
+                        purchasingPrice: "",
+                    },
+                    rules2: {
+                        code: [
+                            { required: true, message: '请输入商品条形码', trigger: 'blur' },
+                        ],
+                        productNumber: [
+                            { required: true, message: '请输入商品数量', trigger: 'blur' },
+                        ],
+                        purchasingPrice: [
+                            { required: true, message: '请输入商品进价', trigger: 'blur' }
+                        ],
+                    }
+                };
+            },
+
+            methods: {
+                //表单验证
+                submitForm(formName) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+
+
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    });
+                },
+                resetForm(formName) {
+                    this.$refs[formName].resetFields();
+                }
+
+            }
+        });
+    </script>
+</body>
+
+</html>
