@@ -2,17 +2,8 @@ var express = require('express');
 var router = express.Router();
 //引入crypto模块
 var md5 = require("crypto")
-//引入mysql模块
-var mysql = require("mysql")
-//2 链接数据库
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'smms'
-});
-//3 打开数据库链接
-connection.connect();
+//引入mysqlConn模块
+var connection=require("./mysqlConn")
 //设置member_add路由
 router.post('/add', function (req, res, next) {
   //结构赋值

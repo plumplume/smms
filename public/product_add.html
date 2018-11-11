@@ -29,51 +29,51 @@
                 <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px"
                     :label-position="labelPosition" class="demo-ruleForm">
                     <!-- 下拉框 -->
-                    <el-form-item label="所属分类" prop="region">
+                    <el-form-item label="所属分类" prop="cg_id">
                         <el-select v-model="ruleForm2.region" placeholder="请选择分类">
                             <el-option label="顶级分类" value="顶级分类"></el-option>
                             <el-option label="普通分类" value="普通分类"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="商品条形码" prop="code">
+                    <el-form-item label="商品条形码" prop="barcode">
                         <el-input v-model="ruleForm2.code"></el-input>
                         <el-button type="primary" plain>生成条形码</el-button>
                     </el-form-item>
-                    <el-form-item label="商品名称" prop="productName">
+                    <el-form-item label="商品名称" prop="goodsname">
                         <el-input v-model="ruleForm2.productName"></el-input>
                     </el-form-item>
-                    <el-form-item label="商品售价" prop="productPrice" class="widthset">
+                    <el-form-item label="商品售价" prop="saleprice" class="widthset">
                         <el-input v-model="ruleForm2.productPrice"></el-input>元
                     </el-form-item>
-                    <el-form-item label="市场价" prop="marketPrice" class="widthset">
+                    <el-form-item label="市场价" prop="marketprice" class="widthset">
                         <el-input v-model="ruleForm2.marketPrice"></el-input>元
                         <p>默认市场价为售价的1.2倍</p>
                     </el-form-item>
-                    <el-form-item label="商品进价" prop="purchasingPrice" class="widthset">
+                    <el-form-item label="商品进价" prop="goodsprice" class="widthset">
                         <el-input v-model="ruleForm2.purchasingPrice"></el-input>元
                     </el-form-item>
-                    <el-form-item label="入库数量" prop="productNumber" class="widthset">
+                    <el-form-item label="入库数量" prop="stockNum" class="widthset">
                         <el-input v-model="ruleForm2.productNumber"></el-input>
                         <p>记重商品单位为千克</p>
                     </el-form-item>
-                    <el-form-item label="商品重量" prop="productWeight" class="widthset">
+                    <el-form-item label="商品重量" prop="weigth" class="widthset">
                         <el-input v-model="ruleForm2.productWeight"></el-input>
                     </el-form-item>
-                    <el-form-item label="商品单位" prop="productUnit" class="widthset">
+                    <el-form-item label="商品单位" prop="unit" class="widthset">
                         <el-input v-model="ruleForm2.productUnit"></el-input>
                     </el-form-item>
                     <!-- 单选框 -->
-                    <el-form-item label="会员优惠" prop="radio1">
-                        <el-radio v-model="ruleForm2.radio1" label="1">享受</el-radio>
-                        <el-radio v-model="ruleForm2.radio1" label="2">不享受</el-radio>
+                    <el-form-item label="会员优惠" prop="promotion">
+                        <el-radio v-model="ruleForm2.promotion" label="1">享受</el-radio>
+                        <el-radio v-model="ruleForm2.promotion" label="2">不享受</el-radio>
                     </el-form-item>
-                    <el-form-item label="是否促销" prop="radio2">
-                        <el-radio v-model="ruleForm2.radio2" label="1">启用</el-radio>
-                        <el-radio v-model="ruleForm2.radio2" label="2">禁用</el-radio>
+                    <el-form-item label="是否促销" prop="discount">
+                        <el-radio v-model="ruleForm2.discount" label="1">启用</el-radio>
+                        <el-radio v-model="ruleForm2.discount" label="2">禁用</el-radio>
                     </el-form-item>
                     <!-- 文本框 -->
-                    <el-form-item label="商品简介" prop="desc">
-                        <el-input type="textarea" v-model="ruleForm2.desc"></el-input>
+                    <el-form-item label="商品简介" prop="goodsDetails">
+                        <el-input type="textarea" v-model="ruleForm2.goodsDetails"></el-input>
                         <p>不超过200个汉字</p>
                     </el-form-item>
                     <el-form-item>
@@ -99,49 +99,49 @@
                 return {
                     labelPosition: 'top',
                     ruleForm2: {
-                        desc: "",
-                        productUnit: "",
-                        productWeight: "",
-                        productNumber: "",
-                        purchasingPrice: "",
-                        marketPrice: "",
-                        productPrice: "",
-                        productName: "",
-                        radio1: '1',
-                        radio2: '2',
-                        region: '',
-                        code: ''
+                        goodsDetails: "",
+                        unit: "",
+                        weigth: "",
+                        stockNum: "",
+                        goodsprice: "",
+                        marketprice: "",
+                        saleprice: "",
+                        goodsname: "",
+                        promotion: '1',
+                        discount: '2',
+                        cg_id: '',
+                        barcode: ''
                     },
                     rules2: {
-                        desc: [
+                        goodsDetails: [
                             { required: true, message: '请输入商品简介', trigger: 'blur' },
                             { min: 2, max: 200, message: '长度在 2 到200 个字符', trigger: 'blur' }
                         ],
-                        productUnit: [
+                        unit: [
                             { required: true, message: '请输入商品单位', trigger: 'blur' }
                         ],
-                        productWeight: [
+                        weigth: [
                             { required: true, message: '请输入商品重量', trigger: 'blur' }
                         ],
-                        productNumber: [
+                        stockNum: [
                             { required: true, message: '请输入入库数量', trigger: 'blur' }
                         ],
-                        purchasingPrice: [
+                        goodsprice: [
                             { required: true, message: '请输入商品进价', trigger: 'blur' }
                         ],
-                        marketPrice: [
+                        marketprice: [
                             { required: true, message: '请输入商品市场价', trigger: 'blur' }
                         ],
-                        productPrice: [
+                        saleprice: [
                             { required: true, message: '请输入商品售价', trigger: 'blur' }
                         ],
-                        productName: [
+                        goodsname: [
                             { required: true, message: '请输入商品名称', trigger: 'blur' }
                         ],
-                        code: [
+                        barcode: [
                             { required: true, message: '请输入商品条形码', trigger: 'blur' }
                         ],
-                        region: [
+                        cg_id: [
                             { required: true, message: '请选择分类', trigger: 'change' }
                         ],
                         sortname: [
